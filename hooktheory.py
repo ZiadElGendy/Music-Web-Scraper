@@ -1,12 +1,14 @@
-import time
 import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+
+
 def main():
     is_quit = False
     scale = ["C", "major"]
-    user_input = input(f"Press G to generate a chord progression\nPress Q to quit the program\nPress S to change the scale\nCurrent scale: {scale[0]} {scale[1]}\n").upper()
+    user_input = input(
+        f"Press G to generate a chord progression\nPress Q to quit the program\nPress S to change the scale\nCurrent scale: {scale[0]} {scale[1]}\n").upper()
     while not is_quit:
         match user_input:
             case "G":
@@ -14,7 +16,8 @@ def main():
                 res = generate_chord_progression(scale[0], scale[1])
                 print("Generated chord progression:")
                 print(res)
-                user_input = input(f"Press G to generate a chord progression\nPress Q to quit the program\nPress S to change the scale\nCurrent scale: {scale[0]} {scale[1]}\n").upper()
+                user_input = input(
+                    f"Press G to generate a chord progression\nPress Q to quit the program\nPress S to change the scale\nCurrent scale: {scale[0]} {scale[1]}\n").upper()
 
             case "Q":
                 is_quit = True
@@ -27,36 +30,49 @@ def main():
             case _:
                 print("Invalid input")
 
+
 def select_scale():
     root = input("Type in the desired root note, alternatively type in 'Rel' for roman numeral notation\n").upper()
 
     match root:
-        case "C#": root = "Db"
-        case "DB": root = "Db"
-        case "D#": root = "Eb"
-        case "EB": root = "Eb"
-        case "GB": root = "F#"
-        case "AB": root = "Ab"
-        case "G#": root = "Ab"
-        case "BB": root = "Bb"
-        case "A#": root = "Bb"
-        case "REL": root = "Rel"
+        case "C#":
+            root = "Db"
+        case "DB":
+            root = "Db"
+        case "D#":
+            root = "Eb"
+        case "EB":
+            root = "Eb"
+        case "GB":
+            root = "F#"
+        case "AB":
+            root = "Ab"
+        case "G#":
+            root = "Ab"
+        case "BB":
+            root = "Bb"
+        case "A#":
+            root = "Bb"
+        case "REL":
+            root = "Rel"
 
-    while (root not in ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B", "Rel"]):
+    while root not in ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B", "Rel"]:
         print("Invalid input, try again.\n")
         root = input("Type in the desired root note, alternatively type in 'Rel' for roman numeral notation\n")
 
     mode = input("Type in the desired mode (Major, Minor, Dorian, Phrygian, Lydian, Mixolydian, Locrian)\n").lower()
-    while (mode not in ["major", "minor", "dorian", "phrygian", "lydian", "mixolydian", "locrian"]):
+    while mode not in ["major", "minor", "dorian", "phrygian", "lydian", "mixolydian", "locrian"]:
         print("Invalid input, try again.\n")
         mode = input("Type in the desired mode (Major, Minor, Dorian, Phrygian, Lydian, Mixolydian, Locrian)\n").lower()
 
     return [root, mode]
+
+
 def generate_chord_progression(root, mode):
     url = f'https://www.hooktheory.com/trends#key={root}&scale={mode}'
     options = Options()
     options.add_argument("--headless=new")
-    driver = webdriver.Chrome(options = options)
+    driver = webdriver.Chrome(options=options)
     driver.get(url)
     driver.implicitly_wait(10)
 
@@ -81,6 +97,7 @@ def generate_chord_progression(root, mode):
 
         clickable = chord_info[2][selected_chord[1]]
         clickable.click()
+
 
 def get_chord_info(driver, count):
     chord_elements = driver.find_elements(By.TAG_NAME, "foreignObject")
